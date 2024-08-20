@@ -1,0 +1,1 @@
+Data mining = Mineração de dados --> dados estatísticos
