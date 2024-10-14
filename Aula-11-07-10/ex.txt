@@ -1,0 +1,32 @@
+products = df['product_name'].unique()
+
+for product in products:
+
+    print(f'\n--------------------------- Árvore de Decisão do Produto {product} ---------------------------------\n')
+    
+    product_df = df.loc[df['product_name'] == product]
+
+    X = product_df.drop(['purchased', 'product_name'], axis=1)
+    y = product_df['purchased']
+
+    X_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    dtc = DecisionTreeClassifier()
+    model = dtc.fit(X_train, y_train)
+    y_pred = dtc.predict(x_test)
+
+    print('Avaliação do Modelo: \n')
+    print(f'Accuracy Score: {accuracy_score(y_test, y_pred)}')
+    print(f'F1 Score: {f1_score(y_test, y_pred)}')
+    print(f'Precision Score: {precision_score(y_test, y_pred)}')
+    print(f'Recall Score: {recall_score(y_test, y_pred)}')
+    print(f'Confusion Matrix: {confusion_matrix(y_test, y_pred)}')
+
+    print('\nVisualização da Árvore:')
+
+    product_df['purchased'] = product_df['purchased'].replace([1, 0], ['Comprou', 'Não Comprou'])
+    
+    fig = plt.figure(figsize=(10, 8))
+    
+    tree.plot_tree(model, feature_names=product_df['rating'].tolist(), class_names=product_df['purchased'].tolist(), filled= True)
+    plt.title(f'Arvore decisão - {product}')
